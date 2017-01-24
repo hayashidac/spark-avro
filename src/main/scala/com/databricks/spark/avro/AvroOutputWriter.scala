@@ -37,7 +37,7 @@ import org.apache.spark.sql.execution.datasources.OutputWriter
 import org.apache.spark.sql.types._
 
 // NOTE: This class is instantiated and used on executor side only, no need to be serializable.
-private[avro] class AvroOutputWriter(
+    private[avro] class AvroOutputWriter(
     path: String,
     context: TaskAttemptContext,
     schema: StructType,
@@ -54,10 +54,7 @@ private[avro] class AvroOutputWriter(
     new AvroKeyOutputFormat[GenericRecord]() {
 
       override def getDefaultWorkFile(context: TaskAttemptContext, extension: String): Path = {
-        val uniqueWriteJobId = context.getConfiguration.get("spark.sql.sources.writeJobUUID")
-        val taskAttemptId: TaskAttemptID = context.getTaskAttemptID
-        val split = taskAttemptId.getTaskID.getId
-        new Path(path, f"part-r-$split%05d-$uniqueWriteJobId$extension")
+        new Path(path)
       }
 
       @throws(classOf[IOException])
